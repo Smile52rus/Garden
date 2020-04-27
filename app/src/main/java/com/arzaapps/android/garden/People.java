@@ -10,7 +10,7 @@ public class People {
     private String mTelephoneNumber;
     private String mHomeAdress;
 
-    private People() {
+    public People() {
         mId = UUID.randomUUID();
     }
     public UUID getId() {
