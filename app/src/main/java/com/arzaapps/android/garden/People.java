@@ -21,11 +21,11 @@ public class People {
         mId = id;
     }
 
-    public String getNubmerArea() {
+    public String getNumberArea() {
         return mNubmerArea;
     }
 
-    public void setNubmerArea(String nubmerArea) {
+    public void setNumberArea(String nubmerArea) {
         mNubmerArea = nubmerArea;
     }
 
