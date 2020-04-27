@@ -18,6 +18,7 @@ public class PeopleLab {
             people.setTelephoneNumber("89150550633");
             people.setName("Иванов Иван Иванович");
             people.setNumberArea("13A");
+            mPeoples.add(people);
         }
     }
 
