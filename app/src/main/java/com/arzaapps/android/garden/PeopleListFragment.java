@@ -32,11 +32,21 @@ public class PeopleListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI() {
         PeopleLab peopleLab = PeopleLab.get(getActivity());
         List<People> peoples = peopleLab.getPeoples();
-        mAdapter = new PeopleAdapter(peoples);
-        mPeopleRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new PeopleAdapter(peoples);
+            mPeopleRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class PeopleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -67,7 +77,7 @@ public class PeopleListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), PeopleActivity.class);
+            Intent intent = PeopleActivity.newIntent(getActivity(), mPeople.getId());
             startActivity(intent);
         }
     }

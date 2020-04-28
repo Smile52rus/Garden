@@ -13,7 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.UUID;
+
 public class PeopleFragment extends Fragment implements TextWatcher {
+
+    private static final String ARG_PEOPLE_ID = "people_id";
     private People mPeople;
     private EditText mNumberAreaEditText;
     private EditText mFioPeopleEditText;
@@ -21,9 +25,22 @@ public class PeopleFragment extends Fragment implements TextWatcher {
     private EditText mHomeAddressEditText;
     private Button mAddPeopleButton;
 
+    public static PeopleFragment newInstance(UUID peopleId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PEOPLE_ID, peopleId);
+
+        PeopleFragment fragment = new PeopleFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        UUID peopleId = (UUID) getArguments().getSerializable(ARG_PEOPLE_ID);
+        mPeople = PeopleLab.get(getActivity()).getPeople(peopleId);
     }
 
     @Nullable
@@ -32,15 +49,19 @@ public class PeopleFragment extends Fragment implements TextWatcher {
         View v = inflater.inflate(R.layout.fragment_people, container, false);
 
         mNumberAreaEditText = v.findViewById(R.id.number_area_edit_text);
+        mNumberAreaEditText.setText(mPeople.getNumberArea());
         mNumberAreaEditText.addTextChangedListener(this);
 
         mFioPeopleEditText = v.findViewById(R.id.fio_people_edit_text);
+        mFioPeopleEditText.setText(mPeople.getName());
         mFioPeopleEditText.addTextChangedListener(this);
 
         mNumberTelephoneEditText = v.findViewById(R.id.number_telephone_edet_text);
+        mNumberTelephoneEditText.setText(mPeople.getTelephoneNumber());
         mNumberTelephoneEditText.addTextChangedListener(this);
 
         mHomeAddressEditText = v.findViewById(R.id.home_address_edit_text);
+        mHomeAddressEditText.setText(mPeople.getHomeAdress());
         mHomeAddressEditText.addTextChangedListener(this);
 
         return v;

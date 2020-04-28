@@ -17,7 +17,7 @@ public class PeopleLab {
             people.setHomeAdress("г. Арзамас, ул Мира, д.5");
             people.setTelephoneNumber("89150550633");
             people.setName("Иванов Иван Иванович");
-            people.setNumberArea("13A");
+            people.setNumberArea("13A" + i);
             mPeoples.add(people);
         }
     }
