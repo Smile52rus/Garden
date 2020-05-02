@@ -12,14 +12,6 @@ public class PeopleLab {
 
     private PeopleLab(Context context) {
         mPeoples = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            People people = new People();
-            people.setHomeAdress("г. Арзамас, ул Мира, д.5");
-            people.setTelephoneNumber("89150550633");
-            people.setName("Иванов Иван Иванович");
-            people.setNumberArea("13A" + i);
-            mPeoples.add(people);
-        }
     }
 
     public static PeopleLab get(Context context) {
@@ -27,6 +19,10 @@ public class PeopleLab {
             sPeopleLab = new PeopleLab(context);
         }
         return sPeopleLab;
+    }
+
+    public void addPeople(People p) {
+        mPeoples.add(p);
     }
 
     public List<People> getPeoples() {

@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,6 +33,32 @@ public class PeopleListFragment extends Fragment {
         updateUI();
 
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.new_people:
+                People people = new People();
+                PeopleLab.get(getActivity()).addPeople(people);
+                Intent intent = PeopleActivity.newIntent(getActivity(), people.getId());
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_people_list, menu);
     }
 
     @Override
@@ -61,7 +90,7 @@ public class PeopleListFragment extends Fragment {
         public PeopleHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_people, parent, false));
             itemView.setOnClickListener(this);
-            mNumberAreaTextView = itemView.findViewById(R.id.number_telephone_text_view);
+            mNumberAreaTextView = itemView.findViewById(R.id.number_area_text_view);
             mNameTextView = itemView.findViewById(R.id.fio_people_text_view);
             mHomeAddressTextView = itemView.findViewById(R.id.home_address_text_view);
             mNumberTelephoneTextView = itemView.findViewById(R.id.number_telephone_text_view);
