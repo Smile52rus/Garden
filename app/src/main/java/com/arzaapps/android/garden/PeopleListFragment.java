@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +56,14 @@ public class PeopleListFragment extends Fragment {
         }
     }
 
+    private void updateSubtitle(){
+        PeopleLab peopleLab = PeopleLab.get(getActivity());
+        int peopleCount = peopleLab.getPeoples().size();
+        String subtitle = getString(R.string.subtitle_format, peopleCount);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -76,6 +85,8 @@ public class PeopleListFragment extends Fragment {
         } else {
             mAdapter.notifyDataSetChanged();
         }
+
+        updateSubtitle();
     }
 
     private class PeopleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
