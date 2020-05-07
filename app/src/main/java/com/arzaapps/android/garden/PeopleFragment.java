@@ -1,5 +1,6 @@
 package com.arzaapps.android.garden;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +28,8 @@ public class PeopleFragment extends Fragment implements TextWatcher {
     private EditText mNumberTelephoneEditText;
     private EditText mHomeAddressEditText;
     private Button mAddPeopleButton;
+    private Button mDeleteButton;
+    private UUID peopleId;
 
     public static PeopleFragment newInstance(UUID peopleId) {
         Bundle args = new Bundle();
@@ -45,9 +49,10 @@ public class PeopleFragment extends Fragment implements TextWatcher {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        UUID peopleId = (UUID) getArguments().getSerializable(ARG_PEOPLE_ID);
-        mPeople = PeopleLab.get(getActivity()).getPeople(peopleId);
+        peopleId = (UUID) getArguments().getSerializable(ARG_PEOPLE_ID);
+        if (peopleId != null) {
+            mPeople = PeopleLab.get(getActivity()).getPeople(peopleId);
+        }
     }
 
     @Nullable
@@ -56,21 +61,51 @@ public class PeopleFragment extends Fragment implements TextWatcher {
         View v = inflater.inflate(R.layout.fragment_people, container, false);
 
         mNumberAreaEditText = v.findViewById(R.id.number_area_edit_text);
-        mNumberAreaEditText.setText(mPeople.getNumberArea());
         mNumberAreaEditText.addTextChangedListener(this);
 
         mFioPeopleEditText = v.findViewById(R.id.fio_people_edit_text);
-        mFioPeopleEditText.setText(mPeople.getName());
         mFioPeopleEditText.addTextChangedListener(this);
 
         mNumberTelephoneEditText = v.findViewById(R.id.number_telephone_edet_text);
-        mNumberTelephoneEditText.setText(mPeople.getTelephoneNumber());
         mNumberTelephoneEditText.addTextChangedListener(this);
 
         mHomeAddressEditText = v.findViewById(R.id.home_address_edit_text);
-        mHomeAddressEditText.setText(mPeople.getHomeAdress());
         mHomeAddressEditText.addTextChangedListener(this);
 
+        if (peopleId != null) {
+            mNumberAreaEditText.setText(mPeople.getNumberArea());
+            mFioPeopleEditText.setText(mPeople.getName());
+            mNumberTelephoneEditText.setText(mPeople.getTelephoneNumber());
+            mHomeAddressEditText.setText(mPeople.getHomeAdress());
+        }
+
+        mAddPeopleButton = v.findViewById(R.id.add_people_button);
+        mAddPeopleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                People people = new People();
+
+                people.setNumberArea(mNumberAreaEditText.getText().toString());
+                people.setName(mFioPeopleEditText.getText().toString());
+                people.setTelephoneNumber(mNumberTelephoneEditText.getText().toString());
+                people.setHomeAdress(mHomeAddressEditText.getText().toString());
+                PeopleLab.get(getActivity()).addPeople(people);
+
+                Toast toast = Toast.makeText(getActivity(),
+                        "Человек добавлен!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
+        mDeleteButton = v.findViewById(R.id.delete_people_button);
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PeopleLab.get(getActivity()).deletePeople(mPeople);
+                getActivity().finish();
+            }
+        });
         return v;
     }
 
@@ -81,14 +116,11 @@ public class PeopleFragment extends Fragment implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        mPeople.setNumberArea(mNumberAreaEditText.getText().toString());
-        mPeople.setName(mFioPeopleEditText.getText().toString());
-        mPeople.setTelephoneNumber(mNumberTelephoneEditText.getText().toString());
-        mPeople.setHomeAdress(mHomeAddressEditText.getText().toString());
     }
 
     @Override
     public void afterTextChanged(Editable s) {
 
     }
+
 }

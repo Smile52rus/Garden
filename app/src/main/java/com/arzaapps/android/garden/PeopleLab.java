@@ -25,6 +25,14 @@ public class PeopleLab {
         mPeoples.add(p);
     }
 
+    public void deletePeople(People p) {
+        for (int i = 0; i < mPeoples.size(); i++){
+            if (p.getId().equals(mPeoples.get(i).getId())){
+                mPeoples.remove(i);
+            }
+        }
+    }
+
     public List<People> getPeoples() {
         return mPeoples;
     }

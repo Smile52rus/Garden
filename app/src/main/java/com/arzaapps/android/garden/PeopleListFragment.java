@@ -46,9 +46,9 @@ public class PeopleListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.new_people:
-                People people = new People();
-                PeopleLab.get(getActivity()).addPeople(people);
-                Intent intent = PeopleActivity.newIntent(getActivity(), people.getId());
+             //   People people = new People();
+            //    PeopleLab.get(getActivity()).addPeople(people);
+                Intent intent = PeopleActivity.newIntent(getActivity(), null);
                 startActivity(intent);
                 return true;
             default:

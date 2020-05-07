@@ -55,6 +55,12 @@
         android:hint="Введите адрес проживания человека"/>
 
     <Button
+        android:id="@+id/delete_people_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Удалить из базы"/>
+
+    <Button
         android:id="@+id/add_people_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
