@@ -66,4 +66,10 @@
         android:layout_height="wrap_content"
         android:text="Добавить в базу"/>
 
+    <Button
+        android:id="@+id/edit_people_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сохранить изменения"/>
+
 </LinearLayout>

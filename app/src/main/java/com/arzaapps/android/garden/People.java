@@ -11,7 +11,11 @@ public class People {
     private String mHomeAdress;
 
     public People() {
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public People(UUID id) {
+        mId = id;
     }
     public UUID getId() {
         return mId;

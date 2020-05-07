@@ -29,6 +29,7 @@ public class PeopleFragment extends Fragment implements TextWatcher {
     private EditText mHomeAddressEditText;
     private Button mAddPeopleButton;
     private Button mDeleteButton;
+    private Button mEditPeopleButton;
     private UUID peopleId;
 
     public static PeopleFragment newInstance(UUID peopleId) {
@@ -72,13 +73,6 @@ public class PeopleFragment extends Fragment implements TextWatcher {
         mHomeAddressEditText = v.findViewById(R.id.home_address_edit_text);
         mHomeAddressEditText.addTextChangedListener(this);
 
-        if (peopleId != null) {
-            mNumberAreaEditText.setText(mPeople.getNumberArea());
-            mFioPeopleEditText.setText(mPeople.getName());
-            mNumberTelephoneEditText.setText(mPeople.getTelephoneNumber());
-            mHomeAddressEditText.setText(mPeople.getHomeAdress());
-        }
-
         mAddPeopleButton = v.findViewById(R.id.add_people_button);
         mAddPeopleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +89,7 @@ public class PeopleFragment extends Fragment implements TextWatcher {
                         "Человек добавлен!",
                         Toast.LENGTH_SHORT);
                 toast.show();
+                getActivity().finish();
             }
         });
 
@@ -103,9 +98,45 @@ public class PeopleFragment extends Fragment implements TextWatcher {
             @Override
             public void onClick(View v) {
                 PeopleLab.get(getActivity()).deletePeople(mPeople);
+
+                Toast toast = Toast.makeText(getActivity(),
+                        "Человек удален!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
                 getActivity().finish();
             }
         });
+
+        mEditPeopleButton = v.findViewById(R.id.edit_people_button);
+        mEditPeopleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPeople.setNumberArea(mNumberAreaEditText.getText().toString());
+                mPeople.setName(mFioPeopleEditText.getText().toString());
+                mPeople.setTelephoneNumber(mNumberTelephoneEditText.getText().toString());
+                mPeople.setHomeAdress(mHomeAddressEditText.getText().toString());
+                PeopleLab.get(getActivity()).updatePeople(mPeople);
+
+                Toast toast = Toast.makeText(getActivity(),
+                        "Изменения сохранены!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+                getActivity().finish();
+            }
+        });
+
+        if (peopleId != null) {
+            mNumberAreaEditText.setText(mPeople.getNumberArea());
+            mFioPeopleEditText.setText(mPeople.getName());
+            mNumberTelephoneEditText.setText(mPeople.getTelephoneNumber());
+            mHomeAddressEditText.setText(mPeople.getHomeAdress());
+
+            mAddPeopleButton.setVisibility(View.GONE);
+        } else {
+            mDeleteButton.setVisibility(View.GONE);
+            mEditPeopleButton.setVisibility(View.GONE);
+        }
+
         return v;
     }
 
@@ -122,5 +153,4 @@ public class PeopleFragment extends Fragment implements TextWatcher {
     public void afterTextChanged(Editable s) {
 
     }
-
 }
