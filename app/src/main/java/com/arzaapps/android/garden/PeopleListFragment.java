@@ -3,6 +3,7 @@ package com.arzaapps.android.garden;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +21,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ajts.androidmads.library.ExcelToSQLite;
+import com.ajts.androidmads.library.SQLiteToExcel;
+import com.arzaapps.android.garden.database.PeopleBaseHelper;
+import com.arzaapps.android.garden.database.PeopleDbSchema;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.arzaapps.android.garden.database.PeopleDbSchema.*;
 
 public class PeopleListFragment extends Fragment implements SearchView.OnQueryTextListener {
     private RecyclerView mPeopleRecyclerView;
@@ -53,9 +62,65 @@ public class PeopleListFragment extends Fragment implements SearchView.OnQueryTe
                 startActivity(intent);
                 return true;
 
-            case R.id.action_search:
+            case R.id.action_export_database_to_excel:
+                SQLiteToExcel sqliteToExcel = new SQLiteToExcel(getActivity(), PeopleBaseHelper.DATABASE_NAME);
+                sqliteToExcel.exportSingleTable(PeopleTable.NAME, "peoples.xls", new SQLiteToExcel.ExportListener() {
+                    @Override
+                    public void onStart() {
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Выгрузка начата",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
 
-            default:
+                    @Override
+                    public void onCompleted(String filePath) {
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Выгрузка успешно завершена",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Ошибка выгрузки",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+                return true;
+
+            case R.id.action_import_database_to_excel:
+                String directory_path = Environment.getExternalStorageDirectory().getPath() + "/Backup/peoples.xls";
+                ExcelToSQLite excelToSQLite = new ExcelToSQLite(getActivity().getApplicationContext(), PeopleBaseHelper.DATABASE_NAME, true);
+                excelToSQLite.importFromFile(directory_path, new ExcelToSQLite.ImportListener() {
+                    @Override
+                    public void onStart() {
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Старт загрузки",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
+                    @Override
+                    public void onCompleted(String dbName) {
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Успешная загрузка",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Ошибка pfгрузки",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+                return true;
+                default:
                 return super.onOptionsItemSelected(item);
         }
     }

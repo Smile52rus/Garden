@@ -15,4 +15,16 @@
         android:title="Добавить человека"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:id="@+id/action_export_database_to_excel"
+        android:icon="@drawable/ic_menu_export"
+        android:title="Выгрузить базу данных"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_import_database_to_excel"
+        android:icon="@drawable/ic_menu_export"
+        android:title="Загрузить базу данных"
+        app:showAsAction="never"/>
+
 </menu>

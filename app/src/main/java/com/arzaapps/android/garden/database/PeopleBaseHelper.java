@@ -4,11 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.ajts.androidmads.library.SQLiteToExcel;
 import com.arzaapps.android.garden.database.PeopleDbSchema.PeopleTable;
 
 public class PeopleBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME = "peopleBase.db";
+    public static final String DATABASE_NAME = "peopleBase.db";
 
 
     public PeopleBaseHelper(Context context) {
