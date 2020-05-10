@@ -92,7 +92,7 @@ public class PeopleListFragment extends Fragment implements SearchView.OnQueryTe
                 return true;
 
             case R.id.action_import_database_to_excel:
-                String directory_path = Environment.getExternalStorageDirectory().getPath() + "/Backup/peoples.xls";
+                String directory_path = Environment.getExternalStorageDirectory().getPath() + "/peoples.xls";
                 ExcelToSQLite excelToSQLite = new ExcelToSQLite(getActivity().getApplicationContext(), PeopleBaseHelper.DATABASE_NAME, true);
                 excelToSQLite.importFromFile(directory_path, new ExcelToSQLite.ImportListener() {
                     @Override
@@ -109,6 +109,7 @@ public class PeopleListFragment extends Fragment implements SearchView.OnQueryTe
                                 "Успешная загрузка",
                                 Toast.LENGTH_SHORT);
                         toast.show();
+                        updateUI();
                     }
 
                     @Override
