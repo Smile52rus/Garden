@@ -9,8 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +19,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PeopleListFragment extends Fragment {
+public class PeopleListFragment extends Fragment implements SearchView.OnQueryTextListener {
     private RecyclerView mPeopleRecyclerView;
     private PeopleAdapter mAdapter;
 
@@ -44,19 +45,22 @@ public class PeopleListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.new_people:
-             //   People people = new People();
-            //    PeopleLab.get(getActivity()).addPeople(people);
+                //   People people = new People();
+                //    PeopleLab.get(getActivity()).addPeople(people);
                 Intent intent = PeopleActivity.newIntent(getActivity(), null);
                 startActivity(intent);
                 return true;
+
+            case R.id.action_search:
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void updateSubtitle(){
+    private void updateSubtitle() {
         PeopleLab peopleLab = PeopleLab.get(getActivity());
         int peopleCount = peopleLab.getPeoples().size();
         String subtitle = getString(R.string.subtitle_format, peopleCount);
@@ -68,6 +72,10 @@ public class PeopleListFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_people_list, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -88,6 +96,38 @@ public class PeopleListFragment extends Fragment {
         }
 
         updateSubtitle();
+    }
+
+    private void updateList(List<People> newList) {
+        List<People> peoples = new ArrayList<>();
+        peoples.addAll(newList);
+        mAdapter.setPeoples(peoples);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        PeopleLab peopleLab = PeopleLab.get(getActivity());
+        List<People> peoples = peopleLab.getPeoples();
+
+        String userInput = newText;
+
+        List<People> newList = new ArrayList<>();
+
+        for (int i = 0; i < peoples.size(); i++) {
+            if (peoples.get(i).getName().contains(userInput)) {
+                newList.add(peoples.get(i));
+            }
+        }
+
+        updateList(newList);
+        return true;
     }
 
     private class PeopleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -152,4 +192,5 @@ public class PeopleListFragment extends Fragment {
             mPeoples = peoples;
         }
     }
+
 }
