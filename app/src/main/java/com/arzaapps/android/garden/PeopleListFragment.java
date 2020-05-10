@@ -121,7 +121,7 @@ public class PeopleListFragment extends Fragment implements SearchView.OnQueryTe
         List<People> newList = new ArrayList<>();
 
         for (int i = 0; i < peoples.size(); i++) {
-            if (peoples.get(i).getName().contains(userInput)) {
+            if ((peoples.get(i).getName().toLowerCase().contains(userInput)) || (peoples.get(i).getNumberArea().toLowerCase().contains(userInput)) || (peoples.get(i).getTelephoneNumber().toLowerCase().contains(userInput)) || (peoples.get(i).getHomeAdress().toLowerCase().contains(userInput))) {
                 newList.add(peoples.get(i));
             }
         }
