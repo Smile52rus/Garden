@@ -1,6 +1,11 @@
 package com.arzaapps.android.garden;
 
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.UUID;
@@ -30,6 +36,7 @@ public class PeopleFragment extends Fragment implements TextWatcher {
     private Button mAddPeopleButton;
     private Button mDeleteButton;
     private Button mEditPeopleButton;
+    private Button mCallPeopleButton;
     private UUID peopleId;
 
     public static PeopleFragment newInstance(UUID peopleId) {
@@ -97,17 +104,12 @@ public class PeopleFragment extends Fragment implements TextWatcher {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PeopleLab.get(getActivity()).deletePeople(mPeople);
-
-                Toast toast = Toast.makeText(getActivity(),
-                        "Человек удален!",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-                getActivity().finish();
+                showDeletePeopleDialog();
             }
         });
 
         mEditPeopleButton = v.findViewById(R.id.edit_people_button);
+        mEditPeopleButton.setVisibility(View.GONE);
         mEditPeopleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +127,16 @@ public class PeopleFragment extends Fragment implements TextWatcher {
             }
         });
 
+        mCallPeopleButton = v.findViewById(R.id.call_people_button);
+        mCallPeopleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mNumberTelephoneEditText != null) {
+                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mNumberTelephoneEditText.getText().toString())));
+                }
+            }
+        });
+
         if (peopleId != null) {
             mNumberAreaEditText.setText(mPeople.getNumberArea());
             mFioPeopleEditText.setText(mPeople.getName());
@@ -132,9 +144,15 @@ public class PeopleFragment extends Fragment implements TextWatcher {
             mHomeAddressEditText.setText(mPeople.getHomeAdress());
 
             mAddPeopleButton.setVisibility(View.GONE);
+
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            activity.getSupportActionBar().setTitle("Участок №  " + mPeople.getNumberArea());
         } else {
             mDeleteButton.setVisibility(View.GONE);
-            mEditPeopleButton.setVisibility(View.GONE);
+            mCallPeopleButton.setVisibility(View.GONE);
+
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            activity.getSupportActionBar().setTitle("Добавление человека");
         }
 
         return v;
@@ -142,15 +160,40 @@ public class PeopleFragment extends Fragment implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (peopleId != null) {
+            mEditPeopleButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
 
+    private void showDeletePeopleDialog() {
+            AlertDialog.Builder deletePeopleAlertDialogBuilder = new AlertDialog.Builder(getActivity());
+            deletePeopleAlertDialogBuilder.setTitle("Удалить человека?");  // заголовок
+            deletePeopleAlertDialogBuilder.setMessage("Вы действительно хотите удалить " + mPeople.getName() + " из базы?");
+            deletePeopleAlertDialogBuilder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+
+                    PeopleLab.get(getActivity()).deletePeople(mPeople);
+
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Человек удален!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                    getActivity().finish();
+                }
+            });
+            deletePeopleAlertDialogBuilder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+
+                }
+            });
+            deletePeopleAlertDialogBuilder.show();
     }
 }

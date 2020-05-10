@@ -55,10 +55,12 @@
         android:hint="Введите адрес проживания человека"/>
 
     <Button
-        android:id="@+id/delete_people_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/call_people_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Удалить из базы"/>
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#30A800"
+        android:text="Позвонить"/>
 
     <Button
         android:id="@+id/add_people_button"
@@ -71,5 +73,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Сохранить изменения"/>
+
+
+    <Button
+        android:id="@+id/delete_people_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#FF6E40"
+        android:text="Удалить из базы"/>
+
 
 </LinearLayout>
