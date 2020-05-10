@@ -216,6 +216,7 @@ public class PeopleListFragment extends Fragment implements SearchView.OnQueryTe
 
         public void bind(People people) {
             mPeople = people;
+
             mNumberAreaTextView.setText(mPeople.getNumberArea());
             mNameTextView.setText(mPeople.getName());
             mHomeAddressTextView.setText(mPeople.getHomeAdress());

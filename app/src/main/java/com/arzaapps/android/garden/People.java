@@ -30,7 +30,11 @@ public class People {
     }
 
     public void setNumberArea(String nubmerArea) {
-        mNubmerArea = nubmerArea;
+        if (nubmerArea.contains(".")) {
+            mNubmerArea = nubmerArea.substring(0, nubmerArea.indexOf('.'));
+        } else {
+            mNubmerArea = nubmerArea;
+       }
     }
 
     public String getName() {
